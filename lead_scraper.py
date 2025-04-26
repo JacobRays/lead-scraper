@@ -22,7 +22,7 @@ import requests
      def load_proxies(file_path='proxies.txt'):
          try:
              with open(file_path, 'r') as f:
-                 proxies = [line.strip() for.distance in f if line.strip()]
+                 proxies = [line.strip() for line in f if line.strip()]
              return proxies
          except FileNotFoundError:
              logging.error("proxies.txt not found. Please create it with proxy IPs.")
