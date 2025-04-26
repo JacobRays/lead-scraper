@@ -12,7 +12,7 @@ import requests
      from urllib.parse import urljoin
 
      # Setup logging
-     logging.basicConfig(filename='scraper.log', level=logging.INFO, 
+     logging.basicConfig(filename='/app/data/scraper.log', level=logging.INFO, 
                          format='%(asctime)s - %(levelname)s - %(message)s')
 
      # Initialize user agent rotator
@@ -22,7 +22,7 @@ import requests
      def load_proxies(file_path='proxies.txt'):
          try:
              with open(file_path, 'r') as f:
-                 proxies = [line.strip() for line in f if line.strip()]
+                 proxies = [line.strip() for.distance in f if line.strip()]
              return proxies
          except FileNotFoundError:
              logging.error("proxies.txt not found. Please create it with proxy IPs.")
@@ -32,7 +32,7 @@ import requests
      def init_driver(proxy=None):
          chrome_options = Options()
          chrome_options.add_argument('--headless')  # Run in background
-         chrome_options.add_argument('--no-sandbox')  # Required for Koyeb
+         chrome_options.add_argument('--no-sandbox')  # Required for Render
          chrome_options.add_argument('--disable-dev-shm-usage')  # Optimize for low RAM
          chrome_options.add_argument(f'user-agent={ua.random}')
          if proxy:
@@ -160,7 +160,7 @@ import requests
          return leads
 
      # Save leads to CSV
-     def save_leads(leads, filename='leads.csv'):
+     def save_leads(leads, filename='/app/data/leads.csv'):
          try:
              df = pd.DataFrame(leads)
              df.to_csv(filename, index=False, mode='a', header=not os.path.exists(filename))
@@ -174,7 +174,7 @@ import requests
              df = pd.DataFrame(leads)
              for category in categories:
                  category_leads = df[df['Category'] == category].head(samples_per_category)
-                 category_leads.to_csv(f'sample_{category.lower()}_leads.csv', index=False)
+                 category_leads.to_csv(f'/app/data/sample_{category.lower()}_leads.csv', index=False)
                  logging.info(f"Generated sample for {category}")
          except Exception as e:
              logging.error(f"Error generating samples: {e}")
@@ -194,10 +194,10 @@ import requests
                  logging.info(f"Scraping {category} in {location}")
                  leads = scrape_yellow_pages(category, location, max_leads=leads_per_category)
                  all_leads.extend(leads)
-                 save_leads(leads, f'leads_{category.lower()}.csv')
+                 save_leads(leads, f'/app/data/leads_{category.lower()}.csv')
                  time.sleep(random.uniform(10, 20))
              
-             save_leads(all_leads, 'all_leads.csv')
+             save_leads(all_leads, '/app/data/all_leads.csv')
              generate_samples(all_leads, categories)
              logging.info(f"Total leads scraped: {len(all_leads)}")
              
