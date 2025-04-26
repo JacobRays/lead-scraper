@@ -1,3 +1,4 @@
+import os  
 import requests  
 from bs4 import BeautifulSoup  
 from selenium import webdriver  
@@ -8,11 +9,15 @@ import random
 import time  
 import logging  
 import sys  
-import os  
 from urllib.parse import urljoin  
 
+# Create the directory if it doesn't exist  
+log_dir = '/app/data/'  
+if not os.path.exists(log_dir):  
+    os.makedirs(log_dir)  
+
 # Setup logging  
-logging.basicConfig(filename='/app/data/scraper.log', level=logging.INFO,   
+logging.basicConfig(filename=os.path.join(log_dir, 'scraper.log'), level=logging.INFO,  
                     format='%(asctime)s - %(levelname)s - %(message)s')  
 
 # Initialize user agent rotator  
@@ -54,7 +59,7 @@ def check_robots_txt(url):
         return True  # Proceed cautiously  
 
 # Scrape Yellow Pages for leads  
-def scrape_yellow_pages(search_term, location, max_leads=200):  
+def scrape_yellow_pages(search_term, location, max_leads=100):  
     base_url = "https://www.yellowpages.com"  
     search_url = f"{base_url}/search?search_terms={search_term}&geo_location_terms={location}"  
     
