@@ -12,9 +12,6 @@ import sys
 import os
 from urllib.parse import urljoin
 
-# Ensure /app/data directory exists
-os.makedirs('/app/data', exist_ok=True)
-
 # Setup logging
 logging.basicConfig(filename='/app/data/scraper.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
