@@ -13,7 +13,7 @@ import os
 from urllib.parse import urljoin
 
 # Setup logging
-logging.basicConfig(filename='/app/data/scraper.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='scraper.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Initialize user agent rotator
 ua = UserAgent()
@@ -155,7 +155,7 @@ def scrape_yellow_pages(search_term, location, max_leads=50):
     return leads
 
 # Save leads to CSV
-def save_leads(leads, filename='/app/data/leads.csv'):
+def save_leads(leads, filename='leads.csv'):
     try:
         df = pd.DataFrame(leads)
         df.to_csv(filename, index=False, mode='a', header=not os.path.exists(filename))
@@ -169,7 +169,7 @@ def generate_samples(leads, categories, samples_per_category=10):
         df = pd.DataFrame(leads)
         for category in categories:
             category_leads = df[df['Category'] == category].head(samples_per_category)
-            category_leads.to_csv(f'/app/data/sample_{category.lower()}_leads.csv', index=False)
+            category_leads.to_csv(f'sample_{category.lower()}_leads.csv', index=False)
             logging.info(f"Generated sample for {category}")
     except Exception as e:
         logging.error(f"Error generating samples: {e}")
@@ -189,10 +189,10 @@ def main():
             logging.info(f"Scraping {category} in {location}")
             leads = scrape_yellow_pages(category, location, max_leads=leads_per_category)
             all_leads.extend(leads)
-            save_leads(leads, f'/app/data/leads_{category.lower()}.csv')
+            save_leads(leads, f'leads_{category.lower()}.csv')
             time.sleep(random.uniform(10, 20))
         
-        save_leads(all_leads, '/app/data/all_leads.csv')
+        save_leads(all_leads, 'all_leads.csv')
         generate_samples(all_leads, categories)
         logging.info(f"Total leads scraped: {len(all_leads)}")
         
